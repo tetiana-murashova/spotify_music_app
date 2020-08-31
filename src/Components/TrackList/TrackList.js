@@ -3,9 +3,7 @@ import './TrackList.css'
 import Track from "../Track/Track";
 
 class TrackList extends Component {
-    constructor(props) {
-        super(props);
-    }
+
 
     render() {
         return (
@@ -14,6 +12,7 @@ class TrackList extends Component {
                     this.props.tracks.map(track => {
                         return(
                             <Track
+                                onAdd={this.props.onAdd}
                                 track={track}
                                 key={track.id}
                             />
