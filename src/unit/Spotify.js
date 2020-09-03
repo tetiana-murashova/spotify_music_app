@@ -1,4 +1,4 @@
-const clientId = '83548e0ed71e4121b6324a31b37cfeee';
+const clientId = '83548e0ed71e4121b6324a31b37cf';
 const redirectUri = 'http://localhost:3000/'
 let accessToken;
 const Spotify = {
@@ -22,6 +22,27 @@ const Spotify = {
             const accessUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectUri}`;
        window.location = accessUrl;
         }
+    },
+    search(term) {
+        const accessToken = Spotify.getAccessToken();
+        return fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`,
+            { headers: {
+                Autorization: `Bearer${accessToken}`
+                }}).then(response => {
+                    return response.json();
+        }).then(jsonResponse => {
+            if (!jsonResponse.tracks) {
+                return [];
+            }
+            return jsonResponse.tracks.items.map(track => ({
+                    id: track.id,
+                    name: track.name,
+                    artists: track.artists[0].name,
+                    album: track.album.name,
+                    uri: track.uri
+            }))
+        })
+
     }
 }
 
